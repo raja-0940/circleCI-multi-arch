@@ -11,6 +11,7 @@ jobs:
     working_directory: /tmp/circleCI-multi-arch
     steps: 
     - run: |
+         echo $QUAY_REPO:$(uname -m)
          git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /tmp/circleCI-multi-arch
          buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
          buildah login -u $QUAY_USER -p $QUAY_PWD quay.io
