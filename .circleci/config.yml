@@ -2,8 +2,12 @@ version: 2.1
 workflows:
   Build multi-arch images:
     jobs:
-      #- x86-image
+      - x86-image
       - ppc64le-image
+      - build-and-test:
+            requires:
+                - x86-image
+                - ppc64le-image
 
 jobs:
   x86-image:
@@ -50,3 +54,19 @@ jobs:
             chmod +x /root/$GH_REPO/build-on-ppc64le.sh
             echo -e "SSH into the ppc64le machine and execute the script\n"
             ssh root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
+  
+  multi-arch-image:
+    machine:
+      enabled: true
+    resource_class: mayurwaghmode/alkalify1-x86-runner
+    steps: 
+      - run:
+          name: Build and push multi-arch manifest
+          command: |
+            buildah manifest create $QUAY_REPO 
+            buildah manifest add $QUAY_REPO $QUAY_REPO:ppc64le
+            buildah manifest add $QUAY_REPO $QUAY_REPO:x86_64
+            buildah manifest inspect $QUAY_REPO
+            echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
+            podman manifest push --all $QUAY_REPO $QUAY_REPO:native
+            buildah manifest rm $QUAY_REPO
