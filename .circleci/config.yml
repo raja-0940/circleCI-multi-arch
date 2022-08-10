@@ -25,9 +25,16 @@ jobs:
     resource_class: mayurwaghmode/alkalify1-x86-runner
     working_directory: /root
     steps:
+      - run:
+          name: Fix ssh Could not resolve hostname
+          command: |
+            ssh-keyscan "$PPC64LE_MACHINE_IP" >> ~/.ssh/known_hosts # Add live server IP to known hosts.
+      - add_ssh_keys: # add private SSH key from CircleCI account based on fingerprint.
+          fingerprints:
+            - "SHA256:H4oJmU8SvvL87bsViII/1U369zx4wwZoXhyixaduktk"
       - run: |
           sudo rm -rf /root/$GH_REPO
           git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
           cd /root/$GH_REPO
           echo -e "SSH into the ppc64le machine and execute the script\n"
-          ssh -i ~/.ssh/id_rsa root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
+          ssh root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
