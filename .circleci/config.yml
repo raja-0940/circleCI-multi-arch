@@ -33,6 +33,8 @@ jobs:
           fingerprints:
             - "SHA256:IpSUoAFNFFHXBPQfYzCx3KiZUPOU+9WZo5adbcOR0DI"
       - run: |
+          echo $QUAY_REPO:$(uname -m)
+          echo "$QUAY_PASS"
           sudo rm -rf /root/$GH_REPO
           git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
           cd /root/$GH_REPO
