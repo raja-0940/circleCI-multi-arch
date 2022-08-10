@@ -2,6 +2,7 @@ sudo git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-mu
 sudo cd /root/"$GH_REPO"
 sudo echo "Hello"
 ARCH=$(uname -m)
+sudo echo "$QUAY_REPO"
 echo "world"
 sudo echo "$QUAY_REPO"
 sudo echo "$QUAY_USER"
