@@ -16,6 +16,6 @@ jobs:
          git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
          cd /root/$GH_REPO
          buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
-         echo "$QUAY_PWD" | sudo buildah login -u "$$QUAY_USER" --password-stdin quay.io
+         echo "Mpersistentchess@123" | sudo buildah login -u "mayurwaghmode111" --password-stdin quay.io
         # buildah login -u $QUAY_USER -p $QUAY_PWD $QUAY_REPO:$(uname -m)
          podman push $QUAY_REPO:$(uname -m)
