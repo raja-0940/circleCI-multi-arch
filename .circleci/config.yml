@@ -11,6 +11,7 @@ jobs:
     working_directory: /tmp/circleCI-multi-arch
     steps: 
     - run: |
+         sudo rm -rf /tmp/circleCI-multi-arch
          echo $QUAY_REPO:$(uname -m)
          git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /tmp/circleCI-multi-arch
          buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
