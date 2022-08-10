@@ -38,6 +38,7 @@ jobs:
       - run:
           name: Build and test node image on ppc64le architecture
           command: |
+            yum install openssh-clients
             echo "QUAY_REPO=$QUAY_REPO" > sshenv
             echo "QUAY_USER=$QUAY_USER" >> sshenv  
             echo "QUAY_PASS=$QUAY_PASS" >> sshenv  
