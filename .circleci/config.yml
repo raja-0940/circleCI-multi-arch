@@ -7,7 +7,8 @@ workflows:
 
 jobs:
   x86-image:
-    machine: true
+    machine:
+      enabled: true
       resource_class: mayurwaghmode/alkalify1-x86-runner
     working_directory: /root
     steps: 
@@ -21,7 +22,8 @@ jobs:
           podman push $QUAY_REPO:$(uname -m)
         
   ppc64le-image:
-    machine: true
+    machine:
+      enabled: true
       resource_class: mayurwaghmode/alkalify1-x86-runner
     steps:
       - run:
