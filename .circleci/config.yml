@@ -11,23 +11,19 @@ jobs:
     working_directory: /root
     steps: 
       - run: |
-          name: Build and push docker image natively on x86_64 architecture
-          command: |
-            sudo rm -rf /root/$GH_REPO
-            echo $QUAY_REPO:$(uname -m)
-            git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
-            cd /root/$GH_REPO
-            buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
-            echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
-            podman push $QUAY_REPO:$(uname -m)
+          sudo rm -rf /root/$GH_REPO
+          echo $QUAY_REPO:$(uname -m)
+          git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
+          cd /root/$GH_REPO
+          buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
+          echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
+          podman push $QUAY_REPO:$(uname -m)
         
   ppc64le-image:
     machine: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
     steps:
       - run: |
-          name: Build and push docker image natively on ppc64le architecture
-          command: |
-            cd /root/$GH_REPO
-            echo -e "SSH into the ppc64le machine and execute the script\n"
-            ssh root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
+          cd /root/$GH_REPO
+          echo -e "SSH into the ppc64le machine and execute the script\n"
+          ssh root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
