@@ -23,8 +23,11 @@ jobs:
   ppc64le-image:
     machine: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
+    working_directory: /root
     steps:
       - run: |
+          sudo rm -rf /root/$GH_REPO
+          git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
           cd /root/$GH_REPO
           echo -e "SSH into the ppc64le machine and execute the script\n"
           ssh -i ~/.ssh/id_rsa root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
