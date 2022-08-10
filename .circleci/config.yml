@@ -2,19 +2,17 @@ version: 2.1
 workflows:
   Build multi-arch images:
     jobs:
-      - runner-test
+      - x86-image
 env:
   QUAY_REPO: quay.io/mayurwaghmode111/circleci-multi-arch
-  ROBOT_USER: ${{ secrets.QUAY_USER }}
-  ROBOT_TOKEN: ${{ secrets.QUAY_PWD }}
   GH_REPO: multi-arch-github
 
 jobs:
-  x86-image::
+  x86-image:
     machine: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
     steps:
       - run: |
          buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
-         buildah login -u ${{ secrets.ROBOT_USER }} -p ${{ secrets.ROBOT_TOKEN }} quay.io
+         buildah login -u $QUAY_USER -p $QUAY_PWD quay.io
          podman push $QUAY_REPO:$(uname -m)
