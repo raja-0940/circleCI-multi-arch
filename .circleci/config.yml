@@ -38,6 +38,6 @@ jobs:
           sudo rm -rf /root/$GH_REPO
           git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
           cd /root/$GH_REPO
-          chmod +x ./root/$GH_REPO/build-on-ppc64le.sh
+          chmod +x /root/$GH_REPO/build-on-ppc64le.sh
           echo -e "SSH into the ppc64le machine and execute the script\n"
-          ssh root@"$PPC64LE_MACHINE_IP" < ./root/$GH_REPO/build-on-ppc64le.sh
+          ssh root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
