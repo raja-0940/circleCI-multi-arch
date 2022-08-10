@@ -22,6 +22,7 @@ jobs:
         
   ppc64le-image:
     machine: true
+    enabled: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
     working_directory:
     steps:
