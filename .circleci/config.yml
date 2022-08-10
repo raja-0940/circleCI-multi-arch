@@ -42,7 +42,7 @@ jobs:
             echo "QUAY_REPO=$QUAY_REPO" > sshenv
             echo "QUAY_USER=$QUAY_USER" >> sshenv  
             echo "QUAY_PASS=$QUAY_PASS" >> sshenv  
-            echo "GH_REPO=$GH_REPO" >> sshenv  
+            echo "GH_REPO=$GH_REPO" >> sshenv
             scp sshenv root@"$PPC64LE_MACHINE_IP":circleci.env
             sudo rm -rf /root/$GH_REPO
             git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
