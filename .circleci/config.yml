@@ -3,6 +3,7 @@ workflows:
   Build multi-arch images:
     jobs:
       - x86-image
+      - ppc64le-image
 
 jobs:
   x86-image:
