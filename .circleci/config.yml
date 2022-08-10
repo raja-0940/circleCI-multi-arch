@@ -27,4 +27,4 @@ jobs:
       - run: |
           cd /root/$GH_REPO
           echo -e "SSH into the ppc64le machine and execute the script\n"
-          ssh root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
+          ssh -i .ssh/id_rsa root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
