@@ -34,10 +34,6 @@ jobs:
           name: Fix ssh Could not resolve hostname
           command: |
             ssh-keyscan "$PPC64LE_MACHINE_IP" >> ~/.ssh/known_hosts # Add live server IP to known hosts.
-            
-      - add_ssh_keys:
-          fingerprints:
-            - "5d:0d:00:42:27:d1:57:a8:f7:d4:60:f3:67:b8:85:3b"
       
       - run:
           name: Build and test node image on ppc64le architecture
