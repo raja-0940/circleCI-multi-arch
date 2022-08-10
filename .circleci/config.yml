@@ -8,9 +8,10 @@ jobs:
   x86-image:
     machine: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
-    steps:
-    - setup
+    working_directory: /tmp/circleCI-multi-arch
+    steps: 
     - run: |
+         git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /tmp/circleCI-multi-arch
          buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
          buildah login -u $QUAY_USER -p $QUAY_PWD quay.io
          podman push $QUAY_REPO:$(uname -m)
