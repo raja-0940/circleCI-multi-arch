@@ -9,7 +9,8 @@ jobs:
     machine: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
     steps:
-      - run: |
+    - setup
+    - run: |
          buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
          buildah login -u $QUAY_USER -p $QUAY_PWD quay.io
          podman push $QUAY_REPO:$(uname -m)
