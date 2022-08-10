@@ -8,8 +8,8 @@ workflows:
 jobs:
   x86-image:
     machine: true
-      enabled: true
-      resource_class: mayurwaghmode/alkalify1-x86-runner
+    enabled: true
+    resource_class: mayurwaghmode/alkalify1-x86-runner
     working_directory: /root
     steps: 
       - run: |
@@ -23,8 +23,8 @@ jobs:
         
   ppc64le-image:
     machine: true
-      enabled: true
-      resource_class: mayurwaghmode/alkalify1-x86-runner
+    enabled: true
+    resource_class: mayurwaghmode/alkalify1-x86-runner
     steps:
       - run:
           name: Fix ssh Could not resolve hostname
