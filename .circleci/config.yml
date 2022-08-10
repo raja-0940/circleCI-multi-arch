@@ -38,6 +38,9 @@ jobs:
       - run:
           name: Build and test node image on ppc64le architecture
           command: |
+            echo 'export PATH=/path/to/foo/bin:$PATH' >> $BASH_ENV
+            echo 'export VERY_IMPORTANT=$(cat important_value)' >> $BASH_ENV
+            source $BASH_ENV
             echo $QUAY_REPO:$(uname -m)
             echo "$QUAY_PASS"
             sudo rm -rf /root/$GH_REPO
