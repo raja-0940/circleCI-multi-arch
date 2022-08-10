@@ -23,15 +23,12 @@ jobs:
   ppc64le-image:
     machine: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
-    working_directory: /root
+    working_directory:
     steps:
       - run:
           name: Fix ssh Could not resolve hostname
           command: |
             ssh-keyscan "$PPC64LE_MACHINE_IP" >> ~/.ssh/known_hosts # Add live server IP to known hosts.
-      - add_ssh_keys: # add private SSH key from CircleCI account based on fingerprint.
-          fingerprints:
-            - "SHA256:IpSUoAFNFFHXBPQfYzCx3KiZUPOU+9WZo5adbcOR0DI"
       - run: |
           echo $QUAY_REPO:$(uname -m)
           echo "$QUAY_PASS"
