@@ -4,7 +4,7 @@ workflows:
     jobs:
       - x86-image
       - ppc64le-image
-      - build-and-test:
+      - multi-arch-image:
             requires:
                 - x86-image
                 - ppc64le-image
