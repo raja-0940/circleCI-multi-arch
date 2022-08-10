@@ -10,7 +10,7 @@ jobs:
     resource_class: mayurwaghmode/alkalify1-x86-runner
     working_directory: /root
     steps: 
-    - run: |
+      - run: |
          name: Build and push docker image natively on x86_64 architecture
          command: |
            sudo rm -rf /root/$GH_REPO
@@ -25,7 +25,7 @@ jobs:
     machine: true
     resource_class: mayurwaghmode/alkalify1-x86-runner
     steps:
-    - run: |
+      - run: |
          name: Build and push docker image natively on ppc64le architecture
          command: |
            cd /root/$GH_REPO
