@@ -38,14 +38,15 @@ jobs:
       - run:
           name: Build and test node image on ppc64le architecture
           command: |
-            echo 'export PATH=/path/to/foo/bin:$PATH' >> $BASH_ENV
-            echo 'export VERY_IMPORTANT=$(cat important_value)' >> $BASH_ENV
-            source $BASH_ENV
-            echo $QUAY_REPO:$(uname -m)
-            echo "$QUAY_PASS"
+            echo "QUAY_REPO=$QUAY_REPO" > sshenv
+            echo "QUAY_USER=$QUAY_USER" >> sshenv  
+            echo "QUAY_PASS=$QUAY_PASS" >> sshenv  
+            echo "GH_REPO=$GH_REPO" >> sshenv  
+            scp sshenv root@"$PPC64LE_MACHINE_IP":circleci.env
             sudo rm -rf /root/$GH_REPO
             git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
             cd /root/$GH_REPO
             chmod +x /root/$GH_REPO/build-on-ppc64le.sh
+            SCP $BASH_ENV root@"$PPC64LE_MACHINE_IP":circleci.env
             echo -e "SSH into the ppc64le machine and execute the script\n"
             ssh root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
