@@ -6,4 +6,4 @@ cd /root/$GH_REPO
 buildah bud -f Dockerfile -t $QUAY_REPO:$ARCH .
 buildah login -u $QUAY_USER -p $QUAY_PASS quay.io
 podman push $QUAY_REPO:$ARCH
-rm ~/circleci.env
+
