@@ -1,3 +1,4 @@
+source circleci.env
 sudo git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/"$GH_REPO"
 sudo cd /root/"$GH_REPO"
 sudo echo "Hello"
