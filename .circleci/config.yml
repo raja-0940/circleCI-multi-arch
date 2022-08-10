@@ -3,9 +3,6 @@ workflows:
   Build multi-arch images:
     jobs:
       - x86-image
-env:
-  QUAY_REPO: quay.io/mayurwaghmode111/circleci-multi-arch
-  GH_REPO: multi-arch-github
 
 jobs:
   x86-image:
