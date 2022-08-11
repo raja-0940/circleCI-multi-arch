@@ -24,6 +24,7 @@ jobs:
           buildah bud -f Dockerfile -t $QUAY_REPO:$(uname -m) .
           echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
           podman push $QUAY_REPO:$(uname -m)
+          buildah rm -f $QUAY_REPO:$(uname -m)
         
   ppc64le-image:
     machine:
