@@ -1,90 +1,72 @@
 version: 2.1
 workflows:
-  testing:
+  Build multi-arch images:
     jobs:
-      - runner-test
+      - x86-image
+      - ppc64le-image
+      - multi-arch-image:
+            requires:
+                - x86-image
+                - ppc64le-image
+
 jobs:
-  runner-test:
-    machine: true
+  x86-image:
+    machine:
+      enabled: true
+    resource_class: raja-0940/amd64
+    working_directory: /root
+    steps: 
+      - run: 
+          name: Build and push image on x86 architecture
+          command: |
+            sudo rm -rf /root/$GH_REPO
+            echo $QUAY_REPO:$(uname -m)
+            git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
+            cd /root/$GH_REPO
+            buildah bud -f x86_64/Dockerfile -t $QUAY_REPO:$(uname -m) .
+            echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
+            podman push $QUAY_REPO:$(uname -m)
+            buildah rmi -f $QUAY_REPO:$(uname -m)
+        
+  ppc64le-image:
+    machine:
+      enabled: true
     resource_class: raja-0940/amd64
     steps:
-      - run: echo "Hi I'm on Runners!"
-# version: 2.1
-# workflows:
-#   Build multi-arch images:
-#     jobs:
-#       - x86-image
-#       - ppc64le-image
-#       - runner-test
-#       - multi-arch-image:
-#             requires:
-#                 - x86-image
-#                 - ppc64le-image
-
-# jobs:
-#   runner-test:
-#     machine: true
-#     resource_class: raja-0940/test1
-#     steps:
-#       - run: echo "Hi I'm on Runners!"
+      - run:
+          name: Fix ssh Could not resolve hostname
+          command: |
+            ssh-keyscan "$PPC64LE_MACHINE_IP" >> ~/.ssh/known_hosts # Add live server IP to known hosts.
       
-#   x86-image:
-#     machine:
-#       enabled: true
-#     resource_class: mayurwaghmode/alkalify1-x86-runner
-#     working_directory: /root
-#     steps: 
-#       - run: 
-#           name: Build and push image on x86 architecture
-#           command: |
-#             sudo rm -rf /root/$GH_REPO
-#             echo $QUAY_REPO:$(uname -m)
-#             git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
-#             cd /root/$GH_REPO
-#             buildah bud -f x86_64/Dockerfile -t $QUAY_REPO:$(uname -m) .
-#             echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
-#             podman push $QUAY_REPO:$(uname -m)
-#             buildah rmi -f $QUAY_REPO:$(uname -m)
-        
-#   ppc64le-image:
-#     machine:
-#       enabled: true
-#     resource_class: mayurwaghmode/alkalify1-x86-runner
-#     steps:
-#       - run:
-#           name: Fix ssh Could not resolve hostname
-#           command: |
-#             ssh-keyscan "$PPC64LE_MACHINE_IP" >> ~/.ssh/known_hosts # Add live server IP to known hosts.
-      
-#       - run:
-#           name: Build and push image on ppc64le architecture
-#           command: |
-#             yum install openssh-clients -y
-#             echo "QUAY_REPO=$QUAY_REPO" > sshenv
-#             echo "QUAY_USER=$QUAY_USER" >> sshenv  
-#             echo "QUAY_PASS=$QUAY_PASS" >> sshenv  
-#             echo "GH_REPO=$GH_REPO" >> sshenv
-#             scp sshenv root@"$PPC64LE_MACHINE_IP":circleci.env
-#             rm -f sshenv
-#             sudo rm -rf /root/$GH_REPO
-#             git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
-#             cd /root/$GH_REPO
-#             chmod +x /root/$GH_REPO/build-on-ppc64le.sh
-#             echo -e "SSH into the ppc64le machine and execute the script\n"
-#             ssh -i /root/.ssh/id_rsa root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
+      - run:
+          name: Build and push image on ppc64le architecture
+          command: |
+            yum install openssh-clients -y
+            echo "QUAY_REPO=$QUAY_REPO" > sshenv
+            echo "QUAY_USER=$QUAY_USER" >> sshenv  
+            echo "QUAY_PASS=$QUAY_PASS" >> sshenv  
+            echo "GH_REPO=$GH_REPO" >> sshenv
+            scp sshenv root@"$PPC64LE_MACHINE_IP":circleci.env
+            rm -f sshenv
+            sudo rm -rf /root/$GH_REPO
+            git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
+            cd /root/$GH_REPO
+            chmod +x /root/$GH_REPO/build-on-ppc64le.sh
+            echo -e "SSH into the ppc64le machine and execute the script\n"
+            ssh -i /root/.ssh/id_rsa root@"$PPC64LE_MACHINE_IP" < /root/$GH_REPO/build-on-ppc64le.sh
   
-#   multi-arch-image:
-#     machine:
-#       enabled: true
-#     resource_class: mayurwaghmode/alkalify1-x86-runner
-#     steps: 
-#       - run:
-#           name: Build and push multi-arch manifest
-#           command: |
-#             buildah manifest create $QUAY_REPO 
-#             buildah manifest add $QUAY_REPO $QUAY_REPO:ppc64le
-#             buildah manifest add $QUAY_REPO $QUAY_REPO:x86_64
-#             buildah manifest inspect $QUAY_REPO
-#             echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
-#             podman manifest push --all $QUAY_REPO $QUAY_REPO:native
-#             buildah manifest rm $QUAY_REPO
+  multi-arch-image:
+    machine:
+      enabled: true
+    resource_class: raja-0940/amd64
+    steps: 
+      - run:
+          name: Build and push multi-arch manifest
+          command: |
+            buildah manifest create $QUAY_REPO 
+            buildah manifest add $QUAY_REPO $QUAY_REPO:ppc64le
+            buildah manifest add $QUAY_REPO $QUAY_REPO:x86_64
+            buildah manifest inspect $QUAY_REPO
+            echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
+            podman manifest push --all $QUAY_REPO $QUAY_REPO:native
+            buildah manifest rm $QUAY_REPO
