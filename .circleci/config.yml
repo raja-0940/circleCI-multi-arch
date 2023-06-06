@@ -21,7 +21,7 @@ jobs:
           command: |
             sudo rm -rf /root/$GH_REPO
             echo $QUAY_REPO:$(uname -m)
-            git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
+            git clone -b hosted-multi-arch https://github.com/raja-0940/circleCI-multi-arch.git /root/$GH_REPO
             cd /root/$GH_REPO
             buildah bud -f x86_64/Dockerfile -t $QUAY_REPO:$(uname -m) .
             echo "$QUAY_PASS" | sudo buildah login -u "$QUAY_USER" --password-stdin quay.io
@@ -49,7 +49,7 @@ jobs:
             scp sshenv root@"$PPC64LE_MACHINE_IP":circleci.env
             rm -f sshenv
             sudo rm -rf /root/$GH_REPO
-            git clone -b hosted-multi-arch https://github.com/mayurwaghmode/circleCI-multi-arch.git /root/$GH_REPO
+            git clone -b hosted-multi-arch https://github.com/raja-0940/circleCI-multi-arch.git /root/$GH_REPO
             cd /root/$GH_REPO
             chmod +x /root/$GH_REPO/build-on-ppc64le.sh
             echo -e "SSH into the ppc64le machine and execute the script\n"
