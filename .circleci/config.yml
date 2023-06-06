@@ -4,12 +4,19 @@ workflows:
     jobs:
       - x86-image
       - ppc64le-image
+      - runner-test
       - multi-arch-image:
             requires:
                 - x86-image
                 - ppc64le-image
 
 jobs:
+  runner-test:
+    machine: true
+    resource_class: raja-0940/test1
+    steps:
+      - run: echo "Hi I'm on Runners!"
+      
   x86-image:
     machine:
       enabled: true
